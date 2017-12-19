@@ -1,8 +1,13 @@
 package com.example.spring.dao;
 
+import com.example.spring.dao.hibernate.factory.HibernateSessionManager;
 import com.example.spring.model.LikeParameters;
+import com.example.spring.model.Likes;
 import com.example.spring.model.ServiceItem;
 import com.example.spring.model.User;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -21,6 +26,9 @@ import java.util.List;
 public class ServiceDaoImpl implements ServiceDao {
     @PersistenceContext
     private EntityManager em;
+
+    @Autowired
+    private HibernateSessionManager hibernateSessionManager;
 
     @Override
     public void add(ServiceItem service) {
@@ -41,7 +49,7 @@ public class ServiceDaoImpl implements ServiceDao {
     @Override
     public void delete(Long id) throws Exception {
         ServiceItem o = em.find(ServiceItem.class, id);
-        if(o == null) {
+        if (o == null) {
             throw new Exception("element doesnt exists");
         }
         em.remove(o);
@@ -49,9 +57,7 @@ public class ServiceDaoImpl implements ServiceDao {
 
     @Override
     public List<ServiceItem> getLiked(Long userId) {
-        List results = em.createNativeQuery("SELECT SERVICES.id, SERVICES.title, SERVICES.description FROM likes \n" +
-                "INNER JOIN users\n" +
-                "        ON likes.user_id = users.id\n" +
+        List results = em.createNativeQuery("SELECT * FROM likes \n" +
                 "    INNER JOIN services \n" +
                 "        ON likes.service_item_id = services.id\n" +
                 "WHERE user_id="+userId, ServiceItem.class).getResultList();
@@ -67,11 +73,28 @@ public class ServiceDaoImpl implements ServiceDao {
 //        ServiceItem serviceItem = em.find(ServiceItem.class, likeParameters.getServiceId());
 //        serviceItem.getUsers().add(user);
 //        em.persist(serviceItem);
+
     }
 
     @Override
     public void unlike(LikeParameters likeParameters) {
-        Query nativeQuery = em.createNativeQuery(" DELETE FROM LIKES WHERE user_id ='" + likeParameters.getUserId() + "' AND service_item_id = '" + likeParameters.getServiceId() + "'");
+        Query nativeQuery = em.createNativeQuery(" DELETE FROM LIKES WHERE user_id ='" + likeParameters.getUserId() + "' AND id = '" + likeParameters.getServiceId() + "'");
         nativeQuery.executeUpdate();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

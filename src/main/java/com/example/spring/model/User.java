@@ -112,12 +112,17 @@ public class User {
                 + ", email=" + email + ", state=" + state + ", userProfiles=" + userProfiles + "]";
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "LIKES", joinColumns = {
-            @JoinColumn(name = "USER_ID")},
-            inverseJoinColumns = { @JoinColumn(name = "SERVICE_ITEM_ID") })
-
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "users")
+    @Getter
     @Setter
-    public Set<ServiceItem> serviceItems = new HashSet<ServiceItem>();
+    private Set<Likes> likes = new HashSet<Likes>();
+
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "Likes", joinColumns = {
+//            @JoinColumn(name = "USER_ID")},
+//            inverseJoinColumns = { @JoinColumn(name = "SERVICE_ITEM_ID") })
+//
+//    @Setter
+//    public Set<ServiceItem> serviceItems = new HashSet<ServiceItem>();
 
 }

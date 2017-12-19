@@ -34,18 +34,28 @@ public class ServiceItem {
     @Column(name = "CREATOR_ID")
     private String creatorId;
 
-//    @Column(name = "LIKE")
-//    private int like;
+    @Column(name = "FILENAME")
+    private String filename;
 
     public ServiceItem(String title, String description) {
         this.title = title;
         this.description = description;
     }
+    public ServiceItem(String title, String description, String filename) {
+        this.title = title;
+        this.description = description;
+        this.filename = filename;
+    }
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "serviceItems")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "serviceItems")
     @Getter
     @Setter
-    private Set<User> users = new HashSet<User>();
+    private Set<Likes> likes = new HashSet<Likes>();
+
+//    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "serviceItems")
+//    @Getter
+//    @Setter
+//    private Set<User> users = new HashSet<User>();
 
 
 }
