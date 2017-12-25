@@ -1,8 +1,8 @@
 package com.example.spring.model;
 
 public enum UserProfileType {
-	USER("USER"),
-	DBA("DBA"),
+	BUYER("BUYER"),
+	SELLER("SELLER"),
 	ADMIN("ADMIN");
 	
 	String userProfileType;

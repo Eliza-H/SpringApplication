@@ -13,4 +13,6 @@ public interface UserParameters {
     String getPassword();
 
     String getEmail() ;
+
+    UserProfileType getUserType();
 }

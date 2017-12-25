@@ -4,13 +4,11 @@ package com.example.spring.contoller;
  * Created by elh on 10.09.17.
  */
 
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.example.spring.contoller.request.UserRequest;
+import com.example.spring.model.UserProfile;
+import com.example.spring.model.UserProfileType;
+import com.example.spring.service.UserProfileService;
+import com.example.spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -20,14 +18,17 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.example.spring.model.UserProfile;
-import com.example.spring.service.UserProfileService;
-import com.example.spring.service.UserService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
-public class HelloWorldController {
+public class BaseController {
 
     @Autowired
     UserProfileService userProfileService;
@@ -36,24 +37,17 @@ public class HelloWorldController {
     UserService userService;
 
 
-    @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
-    public String homePage(Locale locale, ModelMap model) {
-        model.addAttribute("greeting", "Hi, Welcome to mysite");
-        return "home";
-    }
-
-
-    @RequestMapping(value = "/admin", method = RequestMethod.GET)
-    public String adminPage(ModelMap model) {
-        model.addAttribute("user", getPrincipal());
-        return "admin";
-    }
-
-    @RequestMapping(value = "/db", method = RequestMethod.GET)
-    public String dbaPage(ModelMap model) {
-        model.addAttribute("user", getPrincipal());
-        return "dba";
-    }
+//    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+//    public String adminPage(ModelMap model) {
+//        model.addAttribute("user", getPrincipal());
+//        return "admin";
+//    }
+//
+//    @RequestMapping(value = "/db", method = RequestMethod.GET)
+//    public String dbaPage(ModelMap model) {
+//        model.addAttribute("user", getPrincipal());
+//        return "dba";
+//    }
 
     @RequestMapping(value = "/Access_Denied", method = RequestMethod.GET)
     public String accessDeniedPage(ModelMap model) {
@@ -96,9 +90,11 @@ public class HelloWorldController {
         builder.lastName((String) var.getFirst("lastName"));
         builder.password((String) var.getFirst("password"));
         builder.email((String) var.getFirst("email"));
+        String user_role = (String) var.getFirst("user_role");
+        builder.userType(UserProfileType.valueOf(user_role.toUpperCase()));
 
         userService.save(builder.build());
-        return "registrationsuccess";
+        return "login";
     }
 
 

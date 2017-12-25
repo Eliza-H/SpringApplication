@@ -1,6 +1,7 @@
 package com.example.spring.contoller.request;
 
 import com.example.spring.model.UserParameters;
+import com.example.spring.model.UserProfileType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,5 +21,7 @@ public class UserRequest implements UserParameters {
     private String password;
 
     private String email;
+
+    UserProfileType userType;
 
 }

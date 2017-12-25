@@ -1,0 +1,97 @@
+.main-container {
+    width: 60%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin: 20px auto;
+    background: white;
+    position: relative;
+}
+
+.message-button {
+    display: block;
+    padding: 12px 15px 12px 50px;
+    border: 1px solid #efefef;
+    font-weight: 700;
+    border-radius: 4px;
+    position: relative;
+    color: #fff;
+    font-size: 18px;
+    background: #0098d0;
+    word-wrap: break-word;
+    cursor: pointer;
+}
+.price-label {
+    padding: 9px 5px;
+    margin: 0 0 10px -5px;
+    position: relative;
+    border: 1px solid #efefef;
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    background: #fff;
+    color: #414e41;
+    text-align: center;
+    line-height: 34px;
+    height: 49px;
+    z-index: 2;
+}
+
+.price-label::before {
+    width: 17px;
+    height: 67px;
+    background: url("https://www.olx.pl/static/olxpl/packed/img/2f21e1fceb819e1f26ef3f8d8eb7930ddb.png") no-repeat;
+    position: absolute;
+    top: 0;
+    left: -17px;
+    content: '';
+}
+
+.right-info-bar {
+    position: absolute;
+    right: -210px;
+    background: #f7f7f7;
+    top: 0;
+}
+
+.xxxx-large {
+    font-size: 24px;
+}
+.description-container {
+    padding: 0 0 20px 20px;
+}
+
+.title-container {
+    padding: 0 0 5px 20px;
+}
+
+.list-item-price-label {
+    float: right;
+    margin-right: 15px;
+}
+
+body {
+    background: #f7f7f7;
+}
+
+.main-container-item {
+    display: flex;
+    width: 100%;
+}
+
+.main-container-item img {
+    width: 100%;
+}
+
+.main-image {
+
+}
+
+.add-product-button {
+    text-decoration: none;
+    font-size: 40px;
+    font-weight: bold;
+    top: 13px;
+    position: absolute;
+    right: 8px;
+}

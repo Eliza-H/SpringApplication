@@ -1,19 +1,12 @@
 package com.example.spring.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
 
 /**
  * Created by elh on 10.09.17.
@@ -32,12 +25,13 @@ public class User {
         user.lastName = userParameters.getLastName();
         user.firstName = userParameters.getFirstName();
         user.login = userParameters.getLogin();
+        user.userProfiles.add(UserProfile.getInstance(userParameters.getUserType()));
         return user;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "USER_ID", unique = true, nullable = false)
+    //    @Column(name = "USER_ID", unique = true, nullable = false)
     private Long id;
 
     @Setter
@@ -69,11 +63,10 @@ public class User {
     @Column(name = "STATE", nullable = false)
     private String state = State.ACTIVE.getState();
 
-
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "APP_USER_USER_PROFILE",
-            joinColumns = {@JoinColumn(name = "USER_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "USER_PROFILE_ID")})
+        joinColumns = { @JoinColumn(name = "USER_ID") },
+        inverseJoinColumns = { @JoinColumn(name = "USER_PROFILE_ID") })
     @Setter
     private Set<UserProfile> userProfiles = new HashSet<UserProfile>();
 
@@ -83,7 +76,7 @@ public class User {
         int result = 1;
         result = prime * result + Integer.valueOf(id.intValue());
         result = prime * result + ((login == null) ? 0 : login.hashCode());
-        return  result;
+        return result;
     }
 
     @Override
@@ -108,8 +101,8 @@ public class User {
     @Override
     public String toString() {
         return "User [id=" + id + ", login=" + login + ", password=" + password
-                + ", firstName=" + firstName + ", lastName=" + lastName
-                + ", email=" + email + ", state=" + state + ", userProfiles=" + userProfiles + "]";
+            + ", firstName=" + firstName + ", lastName=" + lastName
+            + ", email=" + email + ", state=" + state + ", userProfiles=" + userProfiles + "]";
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "users")
@@ -117,12 +110,12 @@ public class User {
     @Setter
     private Set<Likes> likes = new HashSet<Likes>();
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(name = "Likes", joinColumns = {
-//            @JoinColumn(name = "USER_ID")},
-//            inverseJoinColumns = { @JoinColumn(name = "SERVICE_ITEM_ID") })
-//
-//    @Setter
-//    public Set<ServiceItem> serviceItems = new HashSet<ServiceItem>();
+    //    @ManyToMany(fetch = FetchType.EAGER)
+    //    @JoinTable(name = "Likes", joinColumns = {
+    //            @JoinColumn(name = "USER_ID")},
+    //            inverseJoinColumns = { @JoinColumn(name = "SERVICE_ITEM_ID") })
+    //
+    //    @Setter
+    //    public Set<ServiceItem> serviceItems = new HashSet<ServiceItem>();
 
 }

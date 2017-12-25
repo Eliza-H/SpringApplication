@@ -9,13 +9,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.xml.bind.ValidationException;
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,6 +29,8 @@ public class FileSystemStorageService implements StorageService {
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
+        File dir = new File(properties.getLocation());
+        dir.mkdir();
     }
 
     @Override
@@ -44,27 +43,23 @@ public class FileSystemStorageService implements StorageService {
             if (originalName.contains("..")) {
                 // This is a security check
                 throw new StorageException(
-                        "Cannot store file with relative path outside current directory "
-                                + originalName);
+                    "Cannot store file with relative path outside current directory "
+                        + originalName);
             }
-            int type =originalName.lastIndexOf(".jpeg");
-            int type2 =originalName.lastIndexOf(".png");
-            int type3 =originalName.lastIndexOf(".jpg");
-            if(type == -1&&type2 == -1 && type3 == -1){
-                throw new StorageException("Invalid type");}
-            if (Files.notExists(Paths.get(rootLocation.toString() + "/" + originalName))) {
-                Files.copy(file.getInputStream(), this.rootLocation.resolve(originalName),
+            int type = originalName.lastIndexOf(".jpeg");
+            int type2 = originalName.lastIndexOf(".png");
+            int type3 = originalName.lastIndexOf(".jpg");
+            if (type == -1 && type2 == -1 && type3 == -1) {
+                throw new StorageException("Invalid type");
+            }
+            while (true) {
+                UUID uuid = UUID.randomUUID();
+                String filename = uuid.toString();
+                originalName = filename + originalName.substring(originalName.lastIndexOf("."));
+                if (Files.notExists(Paths.get(rootLocation.toString() + "/" + originalName))) {
+                    Files.copy(file.getInputStream(), this.rootLocation.resolve(originalName),
                         StandardCopyOption.REPLACE_EXISTING);
-            } else {
-                while (true) {
-                    UUID uuid = UUID.randomUUID();
-                    String filename = uuid.toString();
-                    originalName = filename + originalName.substring(originalName.lastIndexOf("."));
-                    if (Files.notExists(Paths.get(rootLocation.toString() + "/" + originalName))) {
-                        Files.copy(file.getInputStream(), this.rootLocation.resolve(originalName),
-                                StandardCopyOption.REPLACE_EXISTING);
-                        break;
-                    }
+                    break;
                 }
             }
 
@@ -78,8 +73,8 @@ public class FileSystemStorageService implements StorageService {
     public Stream<Path> loadAll() {
         try {
             return Files.walk(this.rootLocation, 1)
-                    .filter(path -> !path.equals(this.rootLocation))
-                    .map(path -> this.rootLocation.relativize(path));
+                .filter(path -> !path.equals(this.rootLocation))
+                .map(path -> this.rootLocation.relativize(path));
         } catch (IOException e) {
             throw new StorageException("Failed to read stored files", e);
         }

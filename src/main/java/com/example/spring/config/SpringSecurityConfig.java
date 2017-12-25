@@ -5,12 +5,6 @@ package com.example.spring.config;
  */
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,12 +12,11 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 
 @Configuration
@@ -66,12 +59,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/home").permitAll()
                 .antMatchers("/service/**").permitAll()
                 .antMatchers("/static/**").permitAll()
-                .antMatchers("/admin/**", "/signup").access("hasRole('ADMIN')")
+                .antMatchers("/admin/**").access("hasRole('ADMIN')")
+                .antMatchers("/product/add").access("hasRole('SELLER')")
                 .antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
                 .and().formLogin().loginPage("/login")
                 .usernameParameter("login").passwordParameter("password")
                 .and().exceptionHandling().accessDeniedPage("/Access_Denied")
-                .and().csrf().disable();
+                .and();//.csrf().disable();
     }
 
     @Bean

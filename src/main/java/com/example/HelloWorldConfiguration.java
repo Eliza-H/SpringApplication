@@ -2,15 +2,15 @@ package com.example;
 
 import com.example.spring.config.RoleToUserProfileConverter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.config.annotation.*;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 @EnableWebMvc
@@ -40,6 +40,15 @@ public class HelloWorldConfiguration extends WebMvcConfigurerAdapter {
             public void addResourceHandlers (ResourceHandlerRegistry registry) {
                 registry.addResourceHandler("/static/**").
                         addResourceLocations("classpath:/static/upload-dir/");
+
+                registry.addResourceHandler("/static/styles/**").
+                    addResourceLocations("classpath:/static/css/");
+
+                registry.addResourceHandler("/static/js/**").
+                    addResourceLocations("classpath:/static/js/");
+
+                registry.addResourceHandler("/image/**").
+                    addResourceLocations("classpath:/static/upload-dir/");
             }
         };
     }

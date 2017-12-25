@@ -11,7 +11,7 @@ public class StorageProperties {
     /**
      * Folder location for storing files
      */
-    private String location = "/home/ash/IdeaProjects/springboot-app/src/main/resources/static/upload-dir";
+    private String location = System.getProperty("user.dir") + "/src/main/resources/static/upload-dir";
 
     public String getLocation() {
         return location;

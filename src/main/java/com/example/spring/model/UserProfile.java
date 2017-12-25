@@ -1,16 +1,27 @@
 package com.example.spring.model;
 
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="USER_PROFILE")
+@NoArgsConstructor
 public class UserProfile {
+
+	public static UserProfile getInstance(UserProfileType userProfileType) {
+		return new UserProfile(userProfileType);
+	}
+
+	public UserProfile(UserProfileType userProfileType) {
+		type = userProfileType.getUserProfileType();
+	}
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;	
 
-	@Column(name="TYPE", length=15, unique=true, nullable=false)
-	private String type = UserProfileType.USER.getUserProfileType();
+	@Column(name="TYPE", length=15, nullable=false)
+	private String type;
 	
 	public int getId() {
 		return id;

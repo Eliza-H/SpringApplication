@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/static/styles/add.css"/>
+    <meta name="_csrf" th:value="${_csrf.token}" />
+    <meta name="_csrfx" th:value="${_csrf.parameterName}" />
+    <script>
+        window.__csrf_token = document.querySelector("meta[name=_csrf]").getAttribute("value");
+    </script>
+</head>
+<body>
+
+
+<div id="app"></div>
+<script src="/static/js/react/dist/add.js"></script>
+</body>
+</html>
